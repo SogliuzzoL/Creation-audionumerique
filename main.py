@@ -13,6 +13,7 @@ def trackChangeVolume(trackId, volume):
 def masterChangeVolume(volume):
     client.send_message(f"/master/volume", volume)
 
+
 def trackMute(trackId, value):
     client.send_message(f"/track/{trackId}/mute", int(value))
 
