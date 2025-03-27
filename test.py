@@ -1,9 +1,16 @@
 from pythonosc.udp_client import SimpleUDPClient
 import time
+import RPi.GPIO as GPIO
 
-ip = "127.0.0.1"
+
+ip = "10.42.0.1"
 port = 8000
 client = SimpleUDPClient(ip, port)
+
+BPpin = 26
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(BPpin, GPIO.IN)
 
 
 def fxChangeValue(trackId, fxId, fxParamId, value):
@@ -16,6 +23,11 @@ fxId = 1
 fxChangeValue(trackId, fxId, 1, 50 / 127)
 fxChangeValue(trackId, fxId, 2, 40 / 127)
 fxChangeValue(trackId, fxId, 3, 0.1 / 16)
-fxChangeValue(trackId, fxId, 4, 0.9)
-time.sleep(2)
-fxChangeValue(trackId, fxId, 4, 0.1)
+# fxChangeValue(trackId, fxId, 4, 0.9)
+# time.sleep(2)
+# fxChangeValue(trackId, fxId, 4, 0.1)
+
+while True:
+    BPstate = GPIO.input(BPpin)
+    if BPstate:
+        print("BP")
