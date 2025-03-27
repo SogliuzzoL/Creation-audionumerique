@@ -23,11 +23,10 @@ fxId = 1
 fxChangeValue(trackId, fxId, 1, 50 / 127)
 fxChangeValue(trackId, fxId, 2, 40 / 127)
 fxChangeValue(trackId, fxId, 3, 0.1 / 16)
-# fxChangeValue(trackId, fxId, 4, 0.9)
-# time.sleep(2)
-# fxChangeValue(trackId, fxId, 4, 0.1)
 
 while True:
     BPstate = GPIO.input(BPpin)
     if BPstate:
-        print("BP")
+        fxChangeValue(trackId, fxId, 4, 0.9)
+    else:
+        fxChangeValue(trackId, fxId, 4, 0.1)
