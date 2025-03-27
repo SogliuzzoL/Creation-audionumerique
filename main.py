@@ -49,6 +49,8 @@ buttonsName = [
     "FX Value -",
     "FX Reset",
     "Mute Track",
+    "",
+    "",
 ]
 
 pygame.init()
