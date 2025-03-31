@@ -1,0 +1,39 @@
+desc: Convert OSC to MIDI
+
+slider1:60<0,127,1>Note MIDI
+slider2:127<0,127,1>Vélocité MIDI
+slider3:1<1,16,1>Canal MIDI
+slider4:0<0,1,1{Off,On}>Jouer Note
+
+@init
+note = 60;
+velocity = 127;
+channel = 1;
+playing = 0;
+last_note_played = -1;
+
+@block
+// Lire les sliders
+note = slider1|0;        // |0 force la conversion en entier
+velocity = slider2|0;
+channel = (slider3|0)-1; // -1 ici pour l'utiliser directement dans midisend
+channel = max(0, min(15, channel)); // S'assurer que le canal est entre 0-15
+playing = slider4|0;
+
+// Envoyer les messages MIDI
+playing ? (
+    // Note On seulement si la note a changé ou si c'est la première activation
+    (note != last_note_played) ? (
+        // D'abord Note Off pour la précédente note si nécessaire
+        (last_note_played >= 0) ? midisend(0, 0x90 + channel, last_note_played, 0);
+        // Puis Note On pour la nouvelle note
+        midisend(0, 0x90 + channel, note, velocity);
+        last_note_played = note;
+    );
+) : (
+    // Note Off si on était en train de jouer
+    (last_note_played >= 0) ? (
+        midisend(0, 0x90 + channel, last_note_played, 0);
+        last_note_played = -1;
+    );
+);
